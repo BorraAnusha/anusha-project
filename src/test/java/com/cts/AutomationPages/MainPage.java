@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 
 public class MainPage {
-	private static By contactUsLoc=By.linkText("Contact us");
+	private  By contactUsLoc=By.linkText("Contact us");
 	private WebDriver driver;
 	
 	public MainPage(WebDriver driver) {

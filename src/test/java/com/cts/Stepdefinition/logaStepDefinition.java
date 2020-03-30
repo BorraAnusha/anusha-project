@@ -12,24 +12,23 @@ import com.cts.AutomationPages.CheckOutPage;
 import com.cts.AutomationPages.CheckOutPage2;
 import com.cts.AutomationPages.ConfirmOrderPage;
 import com.cts.AutomationPages.ContactUspPage;
+import com.cts.AutomationPages.CreateAccountPage;
 import com.cts.AutomationPages.DetailsPage;
 import com.cts.AutomationPages.HeaderPage;
+import com.cts.AutomationPages.HomePage;
 import com.cts.AutomationPages.InitialPage;
 import com.cts.AutomationPages.MainPage;
 import com.cts.AutomationPages.PaymentPage;
+import com.cts.AutomationPages.SearchPage;
 import com.cts.AutomationPages.SelectionPage;
 import com.cts.AutomationPages.ShippingCheckoutPage;
+import com.cts.AutomationPages.SignOutPage;
+import com.cts.AutomationPages.SigninPage;
 import com.cts.AutomationPages.deleteIconPage;
+import com.cts.AutomationPages.popupmessagepage;
 import com.cts.AutomationPages.saveAddressPage;
 import com.cts.AutomationPages.signInDetailsPage;
 import com.cts.AutomationPages.updatePage;
-import com.cts.pages.CreateAccountPage;
-import com.cts.pages.HomePage;
-import com.cts.pages.SearchPage;
-import com.cts.pages.SignOutPage;
-import com.cts.pages.SigninPage;
-import com.cts.pages.WishlistPage;
-import com.cts.pages.popupmessagepage;
 import com.cts.utils.ExcelUtils;
 
 import io.cucumber.java.en.Given;
@@ -52,95 +51,113 @@ public class logaStepDefinition {
 	public void click_on_signin_button_and_User_have_to_get_the_account_details_from_ExcelSheet_and_sheetname_and_User_should_click_on_Register_Button(
 			String fileDetails, String sheetName) throws IOException {
 		String str[][] = ExcelUtils.getSheetIntoStringArray(fileDetails, sheetName);
-		HomePage.clickOnSignIn(driver);
-		SigninPage.enterEmail(driver, str[0][0]);
-		SigninPage.clickOnCreateAccount(driver);
-		CreateAccountPage.fillRegForm(driver, str[0][1], str[0][2], str[0][3], str[0][4], str[0][5], str[0][6],
-				str[0][7], str[0][8]);
+		HomePage home=new HomePage(driver);
+		home.clickOnSignIn();
+		SigninPage signIn=new SigninPage(driver);
+		signIn.enterEmail(str[0][0]);
+		signIn.clickOnCreateAccount();
+		CreateAccountPage createacc=new CreateAccountPage(driver);
+		createacc.fillRegForm(str[0][1], str[0][2],str[0][3],str[0][4],str[0][5],str[0][6],str[0][7],str[0][8]);
+		createacc.clickOnCheckBox();
+		createacc.clickOnRegButton();
 	}
 
 	@Then("the application navigate to next page contains page header as {string}")
 	public void the_application_navigate_to_next_page_contains_page_header_as(String string) {
-		SigninPage.getPageHeader(driver);
+		driver.quit();
 	}
 
 	@When("click on signin button and User have to get the account details from ExcelSheet {string} and sheetname {string} and click on Register Button")
 	public void click_on_signin_button_and_User_have_to_get_the_account_details_from_ExcelSheet_and_sheetname_and_click_on_Register_Button(
 			String fileDetails, String sheetName) throws IOException {
 		String str[][] = ExcelUtils.getSheetIntoStringArray(fileDetails, sheetName);
-		HomePage.clickOnSignIn(driver);
-		SigninPage.enterEmail(driver, str[1][0]);
-		SigninPage.clickOnCreateAccount(driver);
-//		CreateAccountPage.fillRegForm(driver, str[0][1], str[0][2], str[0][3], str[0][4], str[0][5], str[1][6],
-//				str[0][7], str[0][8]);
+		HomePage home=new HomePage(driver);
+		home.clickOnSignIn();
+		SigninPage signIn=new SigninPage(driver);
+		signIn.enterEmail(str[1][0]);
+		signIn.clickOnCreateAccount();
 	}
+		
 
 	@Then("the error message should print in the console")
 	public void the_error_message_should_print_in_the_console() {
-
+	driver.quit();
 	}
+
+	
 
 	@When("click on signin button and user should click on login button and enter username as {string} and enter password as {string} and click on signin button")
 	public void click_on_signin_button_and_user_should_click_on_login_button_and_enter_username_as_and_enter_password_as_and_click_on_signin_button(
 			String emailid, String password) {
-		HomePage.clickOnSignIn(driver);
-		SigninPage.enterValidEmailAddresss(driver, emailid);
-		SigninPage.enterValidPassword(driver, password);
-		SigninPage.clickOnLogin(driver);
+		HomePage home=new HomePage(driver);
+		home.clickOnSignIn();
+		SigninPage signIn=new SigninPage(driver);
+		signIn.enterValidEmailAddresss(emailid);
+		signIn.enterValidPassword(password);
+		signIn.clickOnLogin();
 	}
 
 	@Then("i should access to the portal with title as My account and click on SignOut")
 	public void i_should_access_to_the_portal_with_title_as_My_account_and_click_on_SignOut() {
-		SignOutPage.clickOnSignOut(driver);
+		 SignOutPage signOut=new SignOutPage(driver);
+		   signOut.clickOnSignOut();
 	}
 
 	@When("click on signin button and user should click login button and enter username as {string} and enter password as {string} and click on signin button")
 	public void click_on_signin_button_and_user_should_click_login_button_and_enter_username_as_and_enter_password_as_and_click_on_signin_button(
 			String emailid, String password) {
-		HomePage.clickOnSignIn(driver);
-		SigninPage.enterValidEmailAddresss(driver, emailid);
-		SigninPage.enterValidPassword(driver, password);
-		SigninPage.clickOnLogin(driver);
+		HomePage home=new HomePage(driver);
+		home.clickOnSignIn();
+		SigninPage signIn=new SigninPage(driver);
+		signIn.enterValidEmailAddresss(emailid);
+		signIn.enterValidPassword(password);
+		signIn.clickOnLogin();
 	}
 
 	@Then("error message should print in the console")
 	public void error_message_should_print_in_the_console() {
-		SigninPage.getErrorText(driver);
+		SigninPage signIn=new SigninPage(driver);
+		String expectedMsg="Authentication failed.";
+		String actualMsg=signIn.getErrorText();
+		Assert.assertEquals(expectedMsg, actualMsg);
+		System.out.println(actualMsg);
 	}
 
 	@When("User enter {string} in search box")
 	public void user_enter_in_search_box(String searchproduct) {
-
-		HomePage.clickSearchIcon(driver, searchproduct);
-		HomePage.clickSubmitIcon(driver);
+		HomePage home=new HomePage(driver);
+		home.clickSearchIcon(searchproduct);
+		home.clickSubmitIcon();
 	}
 
 	@Then("Assert for the presence of Faded Short Sleeve T-shirts and close browser")
 	public void assert_for_the_presence_of_Faded_Short_Sleeve_T_shirts_and_close_browser() {
-
-		String shirtActualText = HomePage.getSearchShirtDetail(driver);
+		HomePage home=new HomePage(driver);
+		String shirtActualText = home.getSearchShirtDetail();
 		Assert.assertEquals(shirtActualText, "Faded Short Sleeve T-shirts");
 		System.out.println(shirtActualText);
 	}
 
 	@Then("Assert for the presence of No results were found for your search Tables element and close the browser")
 	public void assert_for_the_presence_of_No_results_were_found_for_your_search_Tables_element_and_close_the_browser() {
-		String errmsg = HomePage.getFailedmessage(driver);
+		HomePage home=new HomePage(driver);
+		String errmsg = home.getFailedmessage();
 		System.out.println(errmsg);
 
 	}
 
 	@When("User click on women Icon")
 	public void user_click_on_women_Icon() {
-		HomePage.clickWomenIcon(driver);
+		HomePage home=new HomePage(driver);
+		home.clickWomenIcon();
 	}
 
 	@When("move to tops and select for medium size and short sleeve button")
 	public void move_to_tops_and_select_for_medium_size_and_short_sleeve_button() {
-
-		SearchPage.clicktopsIcon(driver);
-		SearchPage.clickmediumIcon(driver);
-		SearchPage.clicksleeveIcon(driver);
+		SearchPage search=new SearchPage(driver);
+		search.clicktopsIcon();
+		search.clickmediumIcon();
+		search.clicksleeveIcon();
 	}
 
 	@Then("check both the medium size and short sleeve is checked")
@@ -151,28 +168,16 @@ public class logaStepDefinition {
 
 	@When("move to image icon")
 	public void move_to_image_icon() {
-		SearchPage.dressimage(driver);
+		SearchPage search=new SearchPage(driver);
+		search.dressimage();
 	}
 
 	@Then("User click on quantity icon")
 	public void user_check_on_quantity_icon() {
-		SearchPage.plusicon(driver);
+		SearchPage search=new SearchPage(driver);
+		search.plusicon();
 		driver.quit();
 	}
-
-//	@When("Click on SignIn and username as {string} and password as {string} and Add to wishlistIcon and User enter {string} in search box")
-//	public void click_on_SignIn_and_username_as_and_password_as_and_Add_to_wishlistIcon_and_User_enter_in_search_box(
-//			String emailid, String password, String value) {
-//		HomePage.clickOnSignIn(driver);
-//		SigninPage.enterValidEmailAddresss(driver, emailid);
-//		SigninPage.enterValidPassword(driver, password);
-//		SigninPage.clickOnLogin(driver);
-//		SearchPage.searchLoc(driver, value);
-//		SearchPage.SearchButtonLoc(driver);
-//		SearchPage.clickimage(driver);
-//		WishlistPage.addToWishlist(driver);
-//
-//	}
 
 	@When("The user click on signIn")
 	public void the_user_click_on_signIn() {
